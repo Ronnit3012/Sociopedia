@@ -8,6 +8,8 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import path from "path";
 import { fileURLToPath } from 'url';        // help in properly set the path when we configure the directories
+import authRoutes from './routes/auth.js';
+import { register } from './controllers/auth.js';
 
 /* CONFIGURATIONS  */
 dotenv.config();
@@ -34,6 +36,12 @@ const storage = multer.diskStorage({        // Multer GitHub repo
     }
 });         // this is how you can save files anytime someone uploads a file on the website then the server will save the file at the destination('public/assets') mentioned with the filename
 const upload = multer({ storage });
+
+/* ROUTES WITH FILES */
+app.post('/auth/register', upload.single('picture'), register);
+
+/* ROUTES */
+app.use('/auth', authRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
